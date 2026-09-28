@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>MultiSwing &mdash; Dual Camera Golf Swing Replay for iPhone &amp; iPad</title>
+<meta name="description" content="Record your golf swing from two angles at once with the phones you already own. Every swing replays automatically in slow motion, side by side, and MultiSwing names the fault worth working on.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="MultiSwing &mdash; Dual Camera Golf Swing Replay">
+<meta property="og:description" content="Two phones, two angles, one synced replay. Automatic golf swing capture and analysis for iPhone and iPad.">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+
+<link rel="canonical" href="https://aulie.github.io/multiswing-site/">
+<meta property="og:url" content="https://aulie.github.io/multiswing-site/">
+
+<!-- TODO: og:image needs a 1200x630 og.png, which doesn't exist yet, so
+     twitter:card falls back to no image rather than a wrong one. Update the
+     canonical and og:url above if the site moves to its own domain.
+     Also swap the two hero buttons to the App Store link when it exists. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* MultiSwing — a golf-course palette rather than a generic dark theme:
+     fairway greens for the ground, bunker sand as the second neutral,
+     and the icon's lime as the single accent. Committed to one visual
+     world; every colour is painted explicitly so it holds on any host. */
+  :root {
+    --ground:      #04190F;
+    --ground-2:    #072316;
+    --panel:       #0A2C1E;
+    --panel-2:     #0E3A28;
+    --line:        #1A4A34;
+    --line-soft:   #133A28;
+    --lime:        #C7E84A;
+    --lime-deep:   #9FC63A;
+    --chalk:       #EFF4E9;
+    --muted:       #9CB4A4;
+    --sand:        #D9C79C;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --shell: 1120px;
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--chalk);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  p { margin: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--lime-deep);
+    margin: 0;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    background: rgba(4, 25, 15, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .topbar-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 14px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .wordmark .suffix {
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0;
+    color: var(--muted);
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+  @media (max-width: 420px) {
+    .wordmark .suffix { font-size: 12px; margin-left: 6px; }
+  }
+  .wordmark .appicon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    border-radius: 23%;
+  }
+  .topbar nav {
+    display: flex;
+    gap: 22px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .topbar nav a { color: inherit; text-decoration: none; }
+  .topbar nav a:hover { color: var(--chalk); }
+  @media (max-width: 720px) { .topbar nav { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero { padding-block: 72px 56px; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 52px;
+    align-items: center;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 6.4vw, 66px);
+    margin-block: 18px 20px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--lime);
+  }
+  .hero-lead {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 52ch;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 22px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--lime);
+    color: #0A2213;
+  }
+  .btn-primary:hover { background: #D6F45E; }
+  .btn-ghost {
+    border-color: var(--line);
+    color: var(--chalk);
+  }
+  .btn-ghost:hover { border-color: var(--lime-deep); }
+  .cta-note {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+
+  /* Hero visual: the split is the product, so the page's signature
+     element is a literal two-angle panel. */
+  .split {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--panel);
+  }
+  .split-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .split-head span {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .split-head span + span { border-left: 1px solid var(--line); }
+  .split-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--ground-2);
+  }
+  .split-body > div + div { border-left: 1px solid var(--line); }
+  .split-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 14px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .sync-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--lime);
+    margin-right: 7px;
+    vertical-align: middle;
+  }
+
+  /* Hero capability row: what the app does, stated before the fold. */
+  .caps {
+    list-style: none;
+    margin: 26px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .caps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .caps svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    color: var(--lime);
+  }
+  .caps b {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--chalk);
+    line-height: 1.35;
+  }
+  .caps span {
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  /* ---------- generic section ---------- */
+  section { padding-block: 76px; }
+  .sec-head { max-width: 62ch; margin-bottom: 40px; }
+  .sec-head h2 {
+    font-size: clamp(27px, 3.6vw, 40px);
+    margin-block: 14px 16px;
+  }
+  .sec-head p { color: var(--muted); font-size: 17px; }
+
+  /* ---------- steps ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .step {
+    /* Section moved onto --ground, so the cards lift to --panel to stay visible. */
+    background: var(--panel);
+    padding: 26px 22px 30px;
+  }
+  .step-n {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--lime);
+    letter-spacing: 0.1em;
+  }
+  .step-tag {
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sand);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+  .step p b { color: var(--chalk); font-weight: 600; }
+  .step h3 {
+    font-size: 19px;
+    margin-block: 12px 9px;
+  }
+  .step p { font-size: 14.5px; color: var(--muted); }
+  @media (max-width: 860px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ---------- modes ---------- */
+  .modes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .mode {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    padding: 20px 20px 22px;
+  }
+  .mode-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .mode h3 { font-size: 17px; }
+  .mode-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lime-deep);
+    white-space: nowrap;
+  }
+  .mode > p { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+  .plan {
+    background: var(--ground-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 6px;
+  }
+  .plan svg { display: block; width: 100%; height: auto; }
+  .plan-cap {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  @media (max-width: 760px) { .modes { grid-template-columns: 1fr; } }
+
+  /* ---------- detection ---------- */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; gap: 34px; } }
+
+  .gate { display: grid; gap: 12px; }
+  .gate-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: var(--panel);
+    padding: 15px 17px;
+  }
+  .gate-row.result {
+    background: var(--panel-2);
+    border-color: var(--lime-deep);
+  }
+  .gate-ico {
+    flex: none;
+    width: 34px; height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: var(--ground-2);
+    border: 1px solid var(--line);
+  }
+  .gate-row.result .gate-ico { background: rgba(199,232,74,0.14); border-color: transparent; }
+  .gate-txt b {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .gate-txt span { font-size: 13.5px; color: var(--muted); }
+  .gate-and {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--lime-deep);
+    padding-left: 17px;
+  }
+
+  /* ---------- checks ---------- */
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 6px;
+  }
+  .check {
+    font-size: 13.5px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--chalk);
+  }
+  .note {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+  .positions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 26px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    overflow: hidden;
+  }
+  .position {
+    flex: 1 1 120px;
+    padding: 15px 18px;
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+  }
+  .position:last-child { border-right: 0; }
+  .position b {
+    display: block;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .position span {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- table ---------- */
+  .tbl-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  td:first-child { color: var(--muted); white-space: nowrap; }
+  td b { font-weight: 600; }
+  td .mono { font-family: var(--mono); font-size: 13.5px; }
+
+  /* ---------- faq ---------- */
+  .faq {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 46px;
+  }
+  .faq h3 {
+    font-size: 16.5px;
+    line-height: 1.3;
+    margin-bottom: 9px;
+  }
+  .faq p { font-size: 14.5px; color: var(--muted); }
+  @media (max-width: 760px) {
+    .faq { grid-template-columns: 1fr; gap: 26px; }
+  }
+
+  /* ---------- closing ---------- */
+  .closing {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(140deg, var(--panel-2), var(--ground-2));
+    padding: 48px 36px;
+    text-align: center;
+  }
+  .closing h2 { font-size: clamp(26px, 3.4vw, 38px); margin-bottom: 14px; }
+  .closing p { color: var(--muted); max-width: 46ch; margin-inline: auto; }
+  .closing .cta-row { justify-content: center; }
+
+  footer {
+    border-top: 1px solid var(--line-soft);
+    margin-top: 76px;
+    padding-block: 30px 44px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .foot-in {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  a:focus-visible, .btn:focus-visible {
+    outline: 2px solid var(--lime);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 38px; }
+    .hero { padding-block: 48px 40px; }
+    section { padding-block: 56px; }
+  }
+</style>
+
+<style>
+  /* Baseline the hosting platform used to supply; kept so the standalone page
+     renders identically to the version it was designed against. */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+  :root {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="shell topbar-in">
+    <div class="wordmark">
+      <img class="appicon" src="data:image/png;base64,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" alt="" width="26" height="26">
+      MultiSwing<span class="suffix">— Dual Camera Golf</span>
+    </div>
+    <nav>
+      <a href="#setups">Setups</a>
+      <a href="#how">How it works</a>
+      <a href="#detection">Detection</a>
+      <a href="#specs">Specs</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">Dual-camera golf swing replay · iPhone &amp; iPad · 1–3 devices</p>
+        <h1>Hit a ball. Watch the replay. <em>Know what to fix.</em></h1>
+        <p class="hero-lead">
+          MultiSwing replays every golf swing by itself, seconds after you hit it —
+          one angle or two, side by side and in sync — then reads your body through
+          the swing and names the fault worth working on. Use one device, or up to
+          three.
+        </p>
+        <ul class="caps">
+          <li>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M10 3.4a6.6 6.6 0 1 1-4.7 2" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M9.6 1.2 12.4 3l-2.9 1.6z" fill="currentColor"/>
+            </svg>
+            <div><b>Instant replay</b><span>No button, every swing</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <rect x="1.6" y="4" width="7.4" height="12" rx="2" fill="none"
+                    stroke="currentColor" stroke-width="1.7"/>
+              <rect x="11" y="4" width="7.4" height="12" rx="2" fill="none"
+                    stroke="currentColor" stroke-width="1.7"/>
+            </svg>
+            <div><b>One or two angles</b><span>Down the line, face-on</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3.6 10.6l3.8 3.8L16.4 5" fill="none" stroke="currentColor"
+                    stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><b>What to work on</b><span>Seven faults, read off the body</span></div>
+          </li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#how">
+            See how it works
+          </a>
+          <a class="btn btn-ghost" href="#setups">Four setups</a>
+        </div>
+        <p class="cta-note">Coming to the App Store · iOS 18.2 or later</p>
+      </div>
+
+      <div class="split" role="img"
+           aria-label="Two camera angles shown side by side and in sync: down the line, and face-on.">
+        <div class="split-head">
+          <span>Down the line</span>
+          <span>Face on</span>
+        </div>
+        <div class="split-body">
+          <div id="viewDTL"></div>
+          <div id="viewFO"></div>
+        </div>
+        <div class="split-foot">
+          <span><i class="sync-dot"></i>In sync</span>
+          <span>0.25× · 120 fps</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="setups" style="background:var(--ground-2);border-block:1px solid var(--line-soft);">
+    <div class="shell">
+      <div class="sec-head">
+        <p class="eyebrow">Setups</p>
+        <h2>Bring one, two or three devices.</h2>
+        <p>Each arrangement below is a mode you choose on the start screen. The app then
+           tells every device the job it has.</p>
+      </div>
+      <div class="modes" id="modes"></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="shell">
+      <div class="sec-head">
+        <p class="eyebrow">How it works</p>
+        <h2>Set it up once, then stop touching your phone.</h2>
+        <p>One device needs three steps. Two or three devices need a fourth at the
+           front, to introduce them to each other. After that the app is watching for
+           a strike and you are just hitting balls.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">01<span class="step-tag">Two or three devices</span></div>
+          <h3>Connect</h3>
+          <p>Open MultiSwing on each device, pick the same session, and give each one its
+             job. Wi-Fi and Bluetooth on — they talk straight to each other, with no
+             network in between. <b>On a single device there is nothing to connect, so
+             this step doesn't appear.</b></p>
+        </div>
+        <div class="step">
+          <div class="step-n">02</div>
+          <h3>Place</h3>
+          <p>Every device about 3 m (10 ft) away, at hip height, a tripod under each. One
+             behind the ball down the line, one square to your chest, and any replay
+             screen where you can see it from address.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">03</div>
+          <h3>Frame</h3>
+          <p>Fit your whole body and the full swing inside the frame. The banner turns
+             green the moment the app can see you.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">04</div>
+          <h3>Swing</h3>
+          <p>The replay opens by itself on the replay device, every time. Practice swings
+             and waggles are ignored, so the library stays clean.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="detection" style="background:var(--ground-2);border-block:1px solid var(--line-soft);">
+    <div class="shell two-col">
+      <div>
+        <p class="eyebrow">Detection</p>
+        <h2 style="font-size:clamp(27px,3.6vw,40px);margin-block:14px 18px;">
+          It waits for the strike, not for you to press record.
+        </h2>
+        <p style="color:var(--muted);font-size:17px;">
+          MultiSwing watches and listens at the same time — body motion through the
+          camera, the crack of impact through the microphone. A swing is only logged when
+          both agree, which is why rehearsals, waggles and the player in the next bay
+          don't end up in your library.
+        </p>
+      </div>
+      <div class="gate">
+        <div class="gate-row">
+          <div class="gate-ico">
+            <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+              <circle cx="10" cy="5" r="2.4" fill="#9CB4A4"/>
+              <path d="M10 8v5m0 0-3 4m3-4 3 4M6 10h8" fill="none" stroke="#9CB4A4"
+                    stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gate-txt">
+            <b>Vision</b>
+            <span>Body pose through the camera, frame by frame.</span>
+          </div>
+        </div>
+        <div class="gate-and">AND — never just one</div>
+        <div class="gate-row">
+          <div class="gate-ico">
+            <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3 10h2.5l2-4 2.5 9 2.5-7 1.5 4H17" fill="none" stroke="#9CB4A4"
+                    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="gate-txt">
+            <b>Sound</b>
+            <span>The transient of ball on club face.</span>
+          </div>
+        </div>
+        <div class="gate-row result">
+          <div class="gate-ico">
+            <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M4 10.5l4 4 8-9" fill="none" stroke="#C7E84A" stroke-width="2.1"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="gate-txt">
+            <b>Swing saved, replay opens</b>
+            <span>Both angles, already lined up on impact.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="analysis">
+    <div class="shell">
+      <div class="sec-head">
+        <p class="eyebrow">Swing analysis</p>
+        <h2>Instant Swing Analysis detects and alerts on swing flaws.</h2>
+        <p>It reads the swing you just hit and is already there when the replay opens.
+           <b>One tap on the overlay turns it off and on.</b> The same switch sits in
+           Settings, and flipping either keeps both in step.</p>
+      </div>
+      <div class="checks">
+        <span class="check">Head Movement</span>
+        <span class="check">Hands at the Top</span>
+        <span class="check">Reverse Spine Angle</span>
+        <span class="check">Hip Sway</span>
+        <span class="check">Early Extension</span>
+        <span class="check">Over the Top</span>
+        <span class="check">Loss of Posture</span>
+      </div>
+      <p class="note" style="margin-top:26px;">Every fault is pinned to the point in the
+         swing where it happens:</p>
+      <div class="positions" style="margin-top:12px;">
+        <div class="position"><span>Position 1</span><b>Address</b></div>
+        <div class="position"><span>Position 2</span><b>Top</b></div>
+        <div class="position"><span>Position 3</span><b>Transition</b></div>
+        <div class="position"><span>Position 4</span><b>Impact</b></div>
+      </div>
+      <p class="note">
+        Tap address, top or impact to scrub straight to that frame.<br>
+        Each check needs an angle that can see it — sway, spine tilt and hand position
+        read face-on, early extension needs down the line. Film both and the whole set runs.
+      </p>
+    </div>
+  </section>
+
+  <section id="specs" style="background:var(--ground-2);border-block:1px solid var(--line-soft);">
+    <div class="shell">
+      <div class="sec-head">
+        <p class="eyebrow">Specifications</p>
+        <h2>What it needs, and what it does.</h2>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">Capture</th>
+              <td><b>60, 120 or 240 fps</b><span class="mono"> · highest rate depends on the device</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Replay speed</th>
+              <td class="mono">1× · 0.5× · 0.25× · 0.1×</td>
+            </tr>
+            <tr>
+              <th scope="row">Angles</th>
+              <td>Down the line and face-on, shown side by side and synced on impact</td>
+            </tr>
+            <tr>
+              <th scope="row">Connection</th>
+              <td>Device to device over Wi-Fi and Bluetooth. <b>No router, no account, no cloud.</b></td>
+            </tr>
+            <tr>
+              <th scope="row">Library</th>
+              <td>Every detected swing saved and grouped by day; export to Photos</td>
+            </tr>
+            <tr>
+              <th scope="row">Placement</th>
+              <td>About <span class="mono">3 m (10 ft)</span> from the ball, at hip height. Tripod recommended.</td>
+            </tr>
+            <tr>
+              <th scope="row">Requires</th>
+              <td>iOS 18.2 or later · iPhone and iPad</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="shell">
+      <div class="sec-head">
+        <p class="eyebrow">Questions</p>
+        <h2>Filming your own swing, answered.</h2>
+      </div>
+      <div class="faq">
+        <div>
+          <h3>Can I film my own golf swing without someone holding the phone?</h3>
+          <p>That is the whole point of it. Put each device on a tripod about 3 m (10 ft)
+             away at hip height and hit balls. Detection fires on the strike, so nobody
+             presses record and nobody stands behind a camera instead of playing.</p>
+        </div>
+        <div>
+          <h3>How do I record a golf swing from two angles at once?</h3>
+          <p>One device behind the ball down the line, one in front of you square to your
+             chest. They connect straight to each other and line their clips up on impact,
+             so the replay shows both angles at the same instant of the swing.</p>
+        </div>
+        <div>
+          <h3>Do I need two phones?</h3>
+          <p>No. One device records and replays on its own, filming whichever angle you
+             want. A second gives you either a dedicated replay screen or a second angle.
+             A third gives you both angles plus a screen to watch them on.</p>
+        </div>
+        <div>
+          <h3>Down the line or face-on — which should I film?</h3>
+          <p>It depends what you are chasing. Sway, spine tilt and hand position at the top
+             read face-on. Early extension and the path of your hands through the downswing
+             need down the line. Film both and every check runs.</p>
+        </div>
+        <div>
+          <h3>Does it need wifi, a signal or an account?</h3>
+          <p>None of the three. The devices find each other directly over Wi-Fi and
+             Bluetooth with no router in between, and the analysis runs on the device
+             itself. Nothing is uploaded and there is nothing to sign in to.</p>
+        </div>
+        <div>
+          <h3>What frame rate do you need to see a golf swing?</h3>
+          <p>120 fps is enough to read the positions clearly. 240 fps, on devices that
+             support it, still holds together when you slow the replay to a tenth of
+             speed. Both sit in Settings, alongside 60.</p>
+        </div>
+        <div>
+          <h3>Will it fill up with practice swings?</h3>
+          <p>No. A swing is only logged when the camera and the microphone agree — body
+             motion and the sound of the strike together. Rehearsals, waggles and the
+             player in the next bay are ignored.</p>
+        </div>
+        <div>
+          <h3>What does it need in order to see you?</h3>
+          <p>Your whole body and the full swing inside the frame; the banner turns green
+             the moment the app can see you. Good light and a background without people
+             walking through it make detection more reliable.</p>
+        </div>
+      </div>
+
+      <!-- Rich-result markup for the questions above. Generated from the same
+           copy, so the two cannot drift apart. -->
+      <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I film my own golf swing without someone holding the phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That is the whole point of it. Put each device on a tripod about 3 m (10 ft) away at hip height and hit balls. Detection fires on the strike, so nobody presses record and nobody stands behind a camera instead of playing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I record a golf swing from two angles at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One device behind the ball down the line, one in front of you square to your chest. They connect straight to each other and line their clips up on impact, so the replay shows both angles at the same instant of the swing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need two phones?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. One device records and replays on its own, filming whichever angle you want. A second gives you either a dedicated replay screen or a second angle. A third gives you both angles plus a screen to watch them on."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Down the line or face-on — which should I film?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends what you are chasing. Sway, spine tilt and hand position at the top read face-on. Early extension and the path of your hands through the downswing need down the line. Film both and every check runs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it need wifi, a signal or an account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "None of the three. The devices find each other directly over Wi-Fi and Bluetooth with no router in between, and the analysis runs on the device itself. Nothing is uploaded and there is nothing to sign in to."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What frame rate do you need to see a golf swing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "120 fps is enough to read the positions clearly. 240 fps, on devices that support it, still holds together when you slow the replay to a tenth of speed. Both sit in Settings, alongside 60."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will it fill up with practice swings?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A swing is only logged when the camera and the microphone agree — body motion and the sound of the strike together. Rehearsals, waggles and the player in the next bay are ignored."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does it need in order to see you?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your whole body and the full swing inside the frame; the banner turns green the moment the app can see you. Good light and a background without people walking through it make detection more reliable."
+      }
+    }
+  ]
+}
+      </script>
+    </div>
+  </section>
+
+  <section>
+    <div class="shell">
+      <div class="closing">
+        <p class="eyebrow">Almost there</p>
+        <h2>Put the second camera where it belongs.</h2>
+        <p>Dual-camera golf swing replay and analysis, in final testing now. Coming to
+           the App Store for iPhone and iPad.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#how">See how it works</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell foot-in">
+    <span>MultiSwing — dual-camera golf swing replay</span>
+    <span class="mono" style="font-family:var(--mono);font-size:12px;">
+      <a href="mailto:kristoffer.aulie@gmail.com" style="color:inherit;">kristoffer.aulie@gmail.com</a>
+    </span>
+    <span class="mono" style="font-family:var(--mono);font-size:12px;">Made for the range, not the desk</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var LIME = "#C7E84A", CHALK = "#EFF4E9", MUTED = "#7E9788", LINE = "#1A4A34";
+
+  /* A phone drawn pointing "up" in its own frame, then rotated into place.
+     The cone is the field of view, which is what makes a plan view read as
+     cameras rather than as scattered rectangles. */
+  function device(x, y, rot, opts) {
+    var dim = opts.ghost ? ' opacity="0.45"' : "";
+    var dash = opts.ghost ? ' stroke-dasharray="3 2.6"' : "";
+    var lens = opts.replay ? "" :
+      '<circle cx="0" cy="-7.5" r="1.9" fill="' + (opts.accent || LIME) + '"/>';
+    var cone = opts.replay ? "" :
+      '<path d="M0 -11 L-30 -46 L30 -46 Z" fill="' + (opts.accent || LIME) + '" opacity="0.13"/>';
+    // The same counterclockwise loop the app icon uses, counter-rotated so it
+    // stays upright however the device is angled in the plan view.
+    var play = opts.replay
+      ? '<g transform="rotate(' + (-rot) + ') translate(0,0.6)">' +
+          '<path d="M-1.64 -4.51 A 4.8 4.8 0 1 0 1.64 -4.51" fill="none" stroke="' + LIME +
+            '" stroke-width="1.6" stroke-linecap="round"/>' +
+          '<path d="M-0.80 -5.40 L2.78 -5.90 L1.62 -2.70 Z" fill="' + LIME + '"/>' +
+        '</g>'
+      : "";
+    var w = opts.replay ? 26 : 15, h = opts.replay ? 19 : 25;
+    return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ')"' + dim + '>' +
+      cone +
+      '<rect x="' + (-w / 2) + '" y="' + (-h / 2) + '" width="' + w + '" height="' + h +
+        '" rx="3.4" fill="#0A2C1E" stroke="' + (opts.accent || CHALK) +
+        '" stroke-width="1.5"' + dash + '/>' +
+      lens + play +
+      '</g>';
+  }
+
+  function label(x, y, text, anchor) {
+    return '<text x="' + x + '" y="' + y + '" fill="' + MUTED +
+      '" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="0.06em" ' +
+      'text-anchor="' + (anchor || "middle") + '">' + text + "</text>";
+  }
+
+  /* Plan view of a bay: golfer beside the ball, target line running up. */
+  function plan(parts) {
+    var s = '<svg viewBox="0 0 240 172" role="img" aria-label="' + parts.alt + '">';
+
+    // Target line out of the ball.
+    s += '<path d="M120 70 V26" stroke="' + LINE + '" stroke-width="1.6" ' +
+         'stroke-dasharray="4 5" fill="none"/>' +
+         '<path d="M120 18 l4.6 8 h-9.2 z" fill="' + LINE + '"/>' +
+         label(120, 13, "TARGET");
+
+    // Golfer and ball.
+    s += '<circle cx="96" cy="80" r="9" fill="' + LIME + '" opacity="0.9"/>' +
+         '<circle cx="120" cy="80" r="3.4" fill="' + CHALK + '"/>' +
+         label(96, 104, "YOU");
+
+    s += parts.body;
+    s += "</svg>";
+    return s;
+  }
+
+  /* The replay screen always sits IN FRONT of the golfer — you have to be able
+     to read it from address, so behind the ball is the one place it cannot go. */
+  var SETUPS = [
+    {
+      title: "One Device · Single-Angle",
+      tag: "1 records & replays",
+      copy: "Record and replay on the same device. Film down the line or face-on — " +
+            "either angle works, so point it at whichever half of the swing you are " +
+            "working on today. Nothing to pair.",
+      cap: "One angle, your choice · records and replays",
+      alt: "Plan view: one phone behind the ball filming down the line, or in front filming face-on.",
+      body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
+            device(208, 80, -90, { ghost: true }) + label(208, 110, "OR FACE ON")
+    },
+    {
+      title: "Two Devices · Single-Angle",
+      tag: "1 records · 1 replays",
+      copy: "One device films — down the line or face-on, your choice — and the other " +
+            "does nothing but show the replay, propped in front of you where you can " +
+            "see it without walking over.",
+      cap: "One angle · replay on its own screen",
+      alt: "Plan view: a phone filming down the line, and a replay screen in front of the golfer.",
+      body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
+            device(198, 92, -78, { replay: true }) + label(198, 122, "REPLAY")
+    },
+    {
+      title: "Two Devices · Dual-Angle",
+      tag: "2 record",
+      copy: "Both devices film — one down the line, one face-on — and the face-on " +
+            "device shows both angles back to you, side by side and in sync.",
+      cap: "Two angles · one screen shows both",
+      alt: "Plan view: a phone down the line, and a face-on phone that also shows the replay.",
+      body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
+            device(208, 80, -90, {}) + label(208, 110, "FACE ON") +
+            label(208, 52, "+ REPLAY")
+    },
+    {
+      title: "Three Devices · Dual-Angle",
+      tag: "2 record · 1 replays",
+      copy: "Two phones on tripods take an angle each, and a third device in front of " +
+            "you — an iPad on the ground works well — plays both angles back.",
+      cap: "Two angles · dedicated replay screen",
+      alt: "Plan view: phones down the line and face-on, plus a replay screen in front of the golfer.",
+      body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
+            device(210, 66, -90, {}) + label(210, 96, "FACE ON") +
+            device(186, 140, -62, { replay: true }) + label(190, 166, "REPLAY")
+    }
+  ];
+
+  var host = document.getElementById("modes");
+  if (host) {
+    host.innerHTML = SETUPS.map(function (m) {
+      return '<article class="mode">' +
+        '<div class="mode-top"><h3>' + m.title + '</h3>' +
+        '<span class="mode-tag">' + m.tag + "</span></div>" +
+        "<p>" + m.copy + "</p>" +
+        '<div class="plan">' + plan(m) + "</div>" +
+        '<div class="plan-cap">' + m.cap + "</div>" +
+        "</article>";
+    }).join("");
+  }
+
+  /* Hero figures — plain stick figures. The two views are told apart by the
+     body, not by scenery: face-on is symmetric, legs spread, both arms in a V
+     down to the grip. Down the line is the same address position seen from the
+     side, so the give-away is the forward bend at the hips. */
+
+  function bone(pts, w, color) {
+    var d = "M" + pts[0][0] + " " + pts[0][1];
+    for (var i = 1; i < pts.length; i++) { d += " L" + pts[i][0] + " " + pts[i][1]; }
+    return '<path d="' + d + '" stroke="' + color + '" stroke-width="' + w +
+           '" stroke-linecap="round" stroke-linejoin="round" fill="none"/>';
+  }
+
+  function dot(x, y, r, fill) {
+    return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + fill + '"/>';
+  }
+
+  function figure(view) {
+    var s = '<svg viewBox="0 0 200 240" style="display:block;width:100%;height:auto">';
+    s += bone([[12, 200], [188, 200]], 2.2, LINE);   // ground
+
+    if (view === "fo") {
+      // Square to the camera: symmetric, stance spread, both arms in a V down
+      // to the grip, club addressed at a ball on the ground.
+      s += dot(100, 58, 15, LIME);
+      s += bone([[100, 72], [100, 86]], 6, LIME);      // neck
+      s += bone([[82, 88], [118, 88]], 7.5, LIME);     // shoulders
+      s += bone([[100, 88], [100, 136]], 8, LIME);     // spine
+      s += bone([[86, 136], [114, 136]], 7, LIME);     // hips
+      s += bone([[86, 136], [74, 194]], 7, LIME);      // legs, spread
+      s += bone([[114, 136], [126, 194]], 7, LIME);
+      s += bone([[68, 196], [80, 196]], 6, LIME);      // feet
+      s += bone([[120, 196], [132, 196]], 6, LIME);
+      // Hands sit just trail-side of centre so the shaft has a natural lean; the
+      // ball is on the midpoint of the stance, and the shaft runs down the gap
+      // between the legs rather than across one.
+      s += bone([[84, 90], [110, 150]], 6, LIME);      // both arms down to the grip
+      s += bone([[116, 90], [110, 150]], 6, LIME);
+      s += dot(110, 152, 6, LIME);                     // hands
+      s += bone([[110, 154], [102, 192]], 3.2, CHALK); // club, addressed down
+      s += dot(100, 196, 4.5, CHALK);                  // ball, mid-stance
+
+    } else {
+      // The green and pin the swing is aimed at, sitting small and high so it
+      // reads as distance rather than as something beside the golfer.
+      s += '<ellipse cx="162" cy="138" rx="27" ry="7" fill="' + LINE + '"/>';
+      s += bone([[162, 138], [162, 108]], 1.8, MUTED);
+      s += '<path d="M163 108 L177 112.5 L163 117 Z" fill="' + LIME + '"/>';
+
+      // The same address position from the side. The forward bend at the hips
+      // is the whole tell: head and shoulders sit well ahead of the hips.
+      s += dot(110, 62, 15, LIME);
+      s += bone([[102, 80], [98, 90]], 6, LIME);       // neck
+      s += dot(98, 90, 8, LIME);                       // shoulder
+      s += bone([[98, 92], [78, 136]], 8, LIME);       // spine, tilted forward
+      s += bone([[82, 136], [74, 136]], 7, LIME);      // hips
+      s += bone([[81, 136], [90, 166], [92, 194]], 7, LIME);   // near leg
+      s += bone([[75, 136], [69, 166], [66, 194]], 7, LIME);   // far leg
+      s += bone([[92, 196], [105, 196]], 6, LIME);     // feet, in profile
+      s += bone([[66, 196], [78, 196]], 6, LIME);
+      s += bone([[98, 92], [104, 146]], 7, LIME);      // arms, hanging together
+      s += dot(105, 148, 6, LIME);                     // hands
+      s += bone([[105, 150], [122, 192]], 3.2, CHALK); // club, addressed down
+      s += dot(126, 196, 4.5, CHALK);                  // ball
+    }
+
+    s += "</svg>";
+    return s;
+  }
+
+  var a = document.getElementById("viewDTL"), b = document.getElementById("viewFO");
+  if (a) { a.innerHTML = figure("dtl"); }
+  if (b) { b.innerHTML = figure("fo"); }
+})();
+</script>
+
+</body>
+</html>
