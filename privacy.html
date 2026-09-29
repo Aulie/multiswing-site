@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Privacy Policy &mdash; MultiSwing</title>
+<meta name="description" content="MultiSwing collects nothing. No account, no analytics, no servers. Every swing stays on the device that filmed it.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Privacy Policy &mdash; MultiSwing">
+<meta property="og:description" content="MultiSwing collects nothing. No account, no analytics, no servers.">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+
+<link rel="canonical" href="https://multiswinggolf.com/privacy.html">
+<meta property="og:url" content="https://multiswinggolf.com/privacy.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* The same golf-course palette as index.html, painted explicitly so this
+     page holds on any host and needs no shared stylesheet. */
+  :root {
+    --ground:      #04190F;
+    --panel:       #0A2C1E;
+    --line:        #1A4A34;
+    --lime:        #C7E84A;
+    --chalk:       #EFF4E9;
+    --muted:       #9CB4A4;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --shell: 720px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--chalk);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+  }
+
+  .shell {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .topbar-in {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--display);
+    font-weight: 700;
+  }
+  .topbar img { border-radius: 6px; display: block; }
+  .topbar a { color: inherit; text-decoration: none; }
+  .topbar a:hover { color: var(--lime); }
+
+  main { padding: 40px 0 64px; }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(28px, 6vw, 40px);
+    line-height: 1.15;
+    margin: 0 0 8px;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-size: 20px;
+    margin: 36px 0 10px;
+    color: var(--lime);
+  }
+
+  .updated {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 28px;
+  }
+
+  .lead {
+    font-size: 18px;
+    border-left: 3px solid var(--lime);
+    padding-left: 16px;
+    margin: 0 0 8px;
+  }
+
+  p { margin: 0 0 14px; }
+  ul { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 8px; }
+
+  a { color: var(--lime); }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 0 0 14px;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 20px 0 32px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  footer a { color: inherit; }
+  .mono { font-family: var(--mono); font-size: 13px; }
+
+  @media (max-width: 720px) {
+    .topbar .suffix { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="shell topbar-in">
+    <img src="icon.png" alt="" width="26" height="26">
+    <a href="index.html">MultiSwing</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated 29 September 2026</p>
+
+    <p class="lead">
+      MultiSwing collects nothing about you. There is no account, no analytics,
+      no advertising, no tracking, and no server of ours for anything to be sent
+      to. Every swing you record stays on the device that filmed it.
+    </p>
+
+    <p>
+      That is the whole policy. The rest of this page explains what the app does
+      touch on your device and why, so you can check the claim rather than take
+      it on trust.
+    </p>
+
+    <h2>What the app records</h2>
+    <p>
+      MultiSwing films golf swings using your device's camera and microphone.
+      Video is written to the app's own storage on your device. The microphone
+      is used two ways: the sound of ball impact is one of the signals that
+      decides a swing happened, and that audio is recorded as part of the clip.
+    </p>
+    <p>
+      Swings are analysed entirely on the device. Body positions are read from
+      the video frames by Apple's on-device Vision framework, and the swing
+      checks run locally. No frame, no measurement and no result leaves your
+      device as part of that analysis.
+    </p>
+
+    <h2>Connections between your own devices</h2>
+    <div class="panel">
+      <p style="margin:0;">
+        MultiSwing's only networking is a direct link between devices you
+        control, over Wi-Fi or Bluetooth on your local network, using Apple's
+        Multipeer Connectivity. It is used to pair your phones, to trigger them
+        together, and to send clips from one to another so a replay can show two
+        angles side by side.
+      </p>
+    </div>
+    <p>
+      There is no intermediary. Clips are not uploaded, relayed or backed up
+      anywhere, and MultiSwing has no account system to attach them to. If you
+      never pair a second device, the app makes no network connection at all.
+    </p>
+    <p>
+      When pairing, devices announce a name so you can tell them apart in the
+      list. That name is visible only to devices on the same local network
+      during pairing.
+    </p>
+
+    <h2>Your photo library</h2>
+    <p>
+      MultiSwing asks for permission to <em>add</em> to your photo library, and
+      only when you choose to export a swing. It does not request or hold
+      read access to your library.
+    </p>
+    <p>
+      Separately, you can import an existing video into MultiSwing. That uses
+      the standard iOS picker: you choose the file, and the app receives only
+      that one video.
+    </p>
+
+    <h2>What is stored, and for how long</h2>
+    <ul>
+      <li>Swing clips and their measurements, in the app's own storage.</li>
+      <li>Your settings, and the identities of devices you chose to remember
+          for pairing, in the app's own preferences.</li>
+      <li>A local diagnostics log, which stays on the device and is rotated as
+          it grows.</li>
+    </ul>
+    <p>
+      All of it lives inside the app. Deleting a swing removes it; deleting
+      MultiSwing removes everything at once. There is nothing held elsewhere for
+      you to request, correct or have erased, because nothing is ever sent
+      elsewhere.
+    </p>
+
+    <h2>Third parties</h2>
+    <p>
+      There are none. MultiSwing contains no analytics SDK, no crash reporter,
+      no advertising identifier and no social login. Nothing in the app profiles
+      you or tracks you across other apps or websites, and no data is sold or
+      shared.
+    </p>
+    <p>
+      This website is served as static pages by GitHub Pages, which, like any
+      web host, processes request data such as your IP address in order to serve
+      the page. The site sets no cookies of its own. It does load web fonts from
+      Google Fonts, which means your browser requests those font files from
+      Google's servers.
+    </p>
+
+    <h2>Children</h2>
+    <p>
+      MultiSwing is suitable for all ages and collects no personal information
+      from anyone, children included.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      If this policy changes, the revised version will be posted here with a new
+      date at the top. Any change that affected what the app collects would be
+      noted in the App Store release notes as well.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about privacy in MultiSwing:
+      <a href="mailto:kristoffer.aulie@gmail.com">kristoffer.aulie@gmail.com</a>
+    </p>
+
+  </div>
+</main>
+
+<footer>
+  <div class="shell">
+    <span>MultiSwing — dual-camera golf swing replay</span><br>
+    <span class="mono"><a href="index.html">Back to multiswing</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
