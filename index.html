@@ -11,6 +11,12 @@
 <meta property="og:title" content="MultiSwing &mdash; Dual Camera Golf Swing Replay">
 <meta property="og:description" content="Two phones, two angles, one synced replay. Automatic golf swing capture and analysis for iPhone and iPad.">
 <meta name="twitter:card" content="summary_large_image">
+<meta property="og:site_name" content="MultiSwing">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://multiswinggolf.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MultiSwing — dual camera golf swing replay for iPhone and iPad">
 
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
@@ -18,9 +24,10 @@
 <link rel="canonical" href="https://multiswinggolf.com/">
 <meta property="og:url" content="https://multiswinggolf.com/">
 
-<!-- TODO: og:image needs a 1200x630 og.png, which doesn't exist yet, so
-     twitter:card falls back to no image rather than a wrong one.
-     Also swap the two hero buttons to the App Store link when it exists. -->
+<!-- og.png is generated, not designed — the wordmark and one line of copy on
+     the site's own background. Replace it with something made if the app ever
+     earns a real launch graphic.
+     TODO: swap the two hero buttons to the App Store link when it exists. -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -658,7 +665,40 @@
         <p>Each arrangement below is a mode you choose on the start screen. The app then
            tells every device the job it has.</p>
       </div>
-      <div class="modes" id="modes"></div>
+      <!-- Static markup on purpose. These four cards were built by JavaScript,
+           which left the most keyword-dense copy on the page out of the HTML
+           entirely, invisible to any crawler that does not run scripts. Only
+           the plan diagrams are drawn by script now. -->
+      <div class="modes" id="modes">
+        <article class="mode">
+          <div class="mode-top"><h3>One Device &middot; Single-Angle</h3>
+            <span class="mode-tag">1 records &amp; replays</span></div>
+          <p>Record and replay on the same device. Film down the line or face on — either angle works, so point it at whichever half of the swing you are working on today. Nothing to pair.</p>
+          <div class="plan"></div>
+          <div class="plan-cap">One angle, your choice &middot; records and replays</div>
+        </article>
+        <article class="mode">
+          <div class="mode-top"><h3>Two Devices &middot; Single-Angle</h3>
+            <span class="mode-tag">1 records &middot; 1 replays</span></div>
+          <p>One device films — down the line or face on, your choice — and the other does nothing but show the replay, propped in front of you where you can see it without walking over.</p>
+          <div class="plan"></div>
+          <div class="plan-cap">One angle &middot; replay on its own screen</div>
+        </article>
+        <article class="mode">
+          <div class="mode-top"><h3>Two Devices &middot; Dual-Angle</h3>
+            <span class="mode-tag">2 record</span></div>
+          <p>Both devices film — one down the line, one face on — and the face-on device shows both angles back to you, side by side and in sync.</p>
+          <div class="plan"></div>
+          <div class="plan-cap">Two angles &middot; one screen shows both</div>
+        </article>
+        <article class="mode">
+          <div class="mode-top"><h3>Three Devices &middot; Dual-Angle</h3>
+            <span class="mode-tag">2 record &middot; 1 replays</span></div>
+          <p>Two phones on tripods take an angle each, and a third device in front of you — an iPad on the ground works well — plays both angles back.</p>
+          <div class="plan"></div>
+          <div class="plan-cap">Two angles &middot; dedicated replay screen</div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -897,6 +937,30 @@
       <!-- Rich-result markup for the questions above. Generated from the same
            copy, so the two cannot drift apart. -->
       <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MultiSwing",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "iOS 17.0 or later",
+        "url": "https://multiswinggolf.com/",
+        "description": "Record a golf swing from up to two angles at once with iPhones and iPads you already own. Every swing replays automatically in slow motion, side by side and synced on impact, and on-device analysis names the flaw worth working on.",
+        "image": "https://multiswinggolf.com/og.png",
+        "featureList": [
+          "Automatic swing detection from sound and motion",
+          "Two camera angles recorded at once and replayed in sync",
+          "On-device swing analysis with no account and no upload",
+          "Works with one, two or three devices"
+        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+      </script>
+
+      <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -1064,44 +1128,22 @@
      to read it from address, so behind the ball is the one place it cannot go. */
   var SETUPS = [
     {
-      title: "One Device · Single-Angle",
-      tag: "1 records & replays",
-      copy: "Record and replay on the same device. Film down the line or face on — " +
-            "either angle works, so point it at whichever half of the swing you are " +
-            "working on today. Nothing to pair.",
-      cap: "One angle, your choice · records and replays",
       alt: "Plan view: one phone behind the ball filming down the line, or in front filming face on.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
             device(208, 80, -90, { ghost: true }) + label(208, 110, "OR FACE ON")
     },
     {
-      title: "Two Devices · Single-Angle",
-      tag: "1 records · 1 replays",
-      copy: "One device films — down the line or face on, your choice — and the other " +
-            "does nothing but show the replay, propped in front of you where you can " +
-            "see it without walking over.",
-      cap: "One angle · replay on its own screen",
       alt: "Plan view: a phone filming down the line, and a replay screen in front of the golfer.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
             device(198, 92, -78, { replay: true }) + label(198, 122, "REPLAY")
     },
     {
-      title: "Two Devices · Dual-Angle",
-      tag: "2 record",
-      copy: "Both devices film — one down the line, one face on — and the face-on " +
-            "device shows both angles back to you, side by side and in sync.",
-      cap: "Two angles · one screen shows both",
       alt: "Plan view: a phone down the line, and a face-on phone that also shows the replay.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
             device(208, 80, -90, {}) + label(208, 110, "FACE ON") +
             label(208, 52, "+ REPLAY")
     },
     {
-      title: "Three Devices · Dual-Angle",
-      tag: "2 record · 1 replays",
-      copy: "Two phones on tripods take an angle each, and a third device in front of " +
-            "you — an iPad on the ground works well — plays both angles back.",
-      cap: "Two angles · dedicated replay screen",
       alt: "Plan view: phones down the line and face on, plus a replay screen in front of the golfer.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
             device(210, 66, -90, {}) + label(210, 96, "FACE ON") +
@@ -1109,17 +1151,11 @@
     }
   ];
 
-  var host = document.getElementById("modes");
-  if (host) {
-    host.innerHTML = SETUPS.map(function (m) {
-      return '<article class="mode">' +
-        '<div class="mode-top"><h3>' + m.title + '</h3>' +
-        '<span class="mode-tag">' + m.tag + "</span></div>" +
-        "<p>" + m.copy + "</p>" +
-        '<div class="plan">' + plan(m) + "</div>" +
-        '<div class="plan-cap">' + m.cap + "</div>" +
-        "</article>";
-    }).join("");
+  /* The cards live in the HTML; only their diagrams are drawn here, in the
+     order the markup declares them. */
+  var plans = document.querySelectorAll("#modes .plan");
+  for (var i = 0; i < plans.length && i < SETUPS.length; i++) {
+    plans[i].innerHTML = plan(SETUPS[i]);
   }
 
   /* Hero figures — plain stick figures. The two views are told apart by the
