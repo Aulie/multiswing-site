@@ -936,6 +936,9 @@
 
       <!-- Rich-result markup for the questions above. Generated from the same
            copy, so the two cannot drift apart. -->
+      <!-- No "offers" block until the price is settled: an unpriced app is
+           simply absent from the rich result, whereas a wrong price is a
+           number Google may show to people. -->
       <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -951,12 +954,7 @@
           "Two camera angles recorded at once and replayed in sync",
           "On-device swing analysis with no account and no upload",
           "Works with one, two or three devices"
-        ],
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        ]
       }
       </script>
 
