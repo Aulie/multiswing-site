@@ -34,21 +34,23 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 
 <style>
-  /* MultiSwing — a golf-course palette rather than a generic dark theme:
-     fairway greens for the ground, bunker sand as the second neutral,
-     and the icon's lime as the single accent. Committed to one visual
-     world; every colour is painted explicitly so it holds on any host. */
+  /* MultiSwing — the app's own palette, tuned for the range: a
+     near-black forest ground so the accents and off-white text hold their
+     contrast in sunlight. Neon means recording and cyan means replay, as
+     in the app; bunker sand stays as the second neutral. Every colour is
+     painted explicitly so it holds on any host. */
   :root {
-    --ground:      #04190F;
-    --ground-2:    #072316;
-    --panel:       #0A2C1E;
-    --panel-2:     #0E3A28;
-    --line:        #1A4A34;
-    --line-soft:   #133A28;
-    --lime:        #C7E84A;
-    --lime-deep:   #9FC63A;
+    --ground:      #0A140E;
+    --ground-2:    #0E1C13;
+    --panel:       #122419;
+    --panel-2:     #17301F;
+    --line:        #2A4835;
+    --line-soft:   #1E3627;
+    --neon:        #A3E635;
+    --neon-deep:   #84CC16;
+    --cyan:        #38BDF8;
     --chalk:       #EFF4E9;
-    --muted:       #9CB4A4;
+    --muted:       rgba(226, 232, 240, 0.85);
     --sand:        #D9C79C;
 
     --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -90,7 +92,7 @@
     font-size: 11px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--lime-deep);
+    color: var(--neon-deep);
     margin: 0;
   }
 
@@ -99,7 +101,7 @@
     position: sticky;
     top: env(safe-area-inset-top, 0px);
     z-index: 20;
-    background: rgba(4, 25, 15, 0.88);
+    background: rgba(10, 20, 14, 0.88);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line-soft);
   }
@@ -161,7 +163,7 @@
   }
   .hero h1 em {
     font-style: normal;
-    color: var(--lime);
+    color: var(--neon);
   }
   .hero-lead {
     font-size: 18px;
@@ -187,15 +189,15 @@
     border: 1px solid transparent;
   }
   .btn-primary {
-    background: var(--lime);
-    color: #0A2213;
+    background: var(--neon);
+    color: #0A140E;
   }
-  .btn-primary:hover { background: #D6F45E; }
+  .btn-primary:hover { background: #BEF264; }
   .btn-ghost {
     border-color: var(--line);
     color: var(--chalk);
   }
-  .btn-ghost:hover { border-color: var(--lime-deep); }
+  .btn-ghost:hover { border-color: var(--neon-deep); }
   .cta-note {
     font-family: var(--mono);
     font-size: 12px;
@@ -246,7 +248,7 @@
     display: inline-block;
     width: 7px; height: 7px;
     border-radius: 50%;
-    background: var(--lime);
+    background: var(--neon);
     margin-right: 7px;
     vertical-align: middle;
   }
@@ -269,8 +271,9 @@
     width: 20px;
     height: 20px;
     margin-top: 2px;
-    color: var(--lime);
+    color: var(--neon);
   }
+  .caps svg.replay { color: var(--cyan); }
   .caps b {
     display: block;
     font-size: 15px;
@@ -314,7 +317,7 @@
     gap: 8px;
     font-family: var(--mono);
     font-size: 12px;
-    color: var(--lime);
+    color: var(--neon);
     letter-spacing: 0.1em;
   }
   .step-tag {
@@ -360,7 +363,7 @@
     font-size: 10.5px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--lime-deep);
+    color: var(--neon-deep);
     white-space: nowrap;
   }
   .mode > p { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
@@ -400,7 +403,7 @@
   }
   .gate-row.result {
     background: var(--panel-2);
-    border-color: var(--lime-deep);
+    border-color: var(--neon-deep);
   }
   .gate-ico {
     flex: none;
@@ -411,7 +414,7 @@
     background: var(--ground-2);
     border: 1px solid var(--line);
   }
-  .gate-row.result .gate-ico { background: rgba(199,232,74,0.14); border-color: transparent; }
+  .gate-row.result .gate-ico { background: rgba(163,230,53,0.14); border-color: transparent; }
   .gate-txt b {
     display: block;
     font-size: 14.5px;
@@ -422,7 +425,7 @@
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.14em;
-    color: var(--lime-deep);
+    color: var(--neon-deep);
     padding-left: 17px;
   }
 
@@ -548,7 +551,7 @@
   }
 
   a:focus-visible, .btn:focus-visible {
-    outline: 2px solid var(--lime);
+    outline: 2px solid var(--neon);
     outline-offset: 3px;
     border-radius: 6px;
   }
@@ -606,7 +609,7 @@
         </p>
         <ul class="caps">
           <li>
-            <svg viewBox="0 0 20 20" aria-hidden="true">
+            <svg class="replay" viewBox="0 0 20 20" aria-hidden="true">
               <!-- The app icon's loop: tail at 3 o'clock, clockwise round to a
                    solid head at 1 o'clock, gap on the right. -->
               <path d="M17 10A7 7 0 1 1 13.5 3.94" fill="none" stroke="currentColor"
@@ -763,8 +766,8 @@
         <div class="gate-row">
           <div class="gate-ico">
             <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-              <circle cx="10" cy="5" r="2.4" fill="#9CB4A4"/>
-              <path d="M10 8v5m0 0-3 4m3-4 3 4M6 10h8" fill="none" stroke="#9CB4A4"
+              <circle cx="10" cy="5" r="2.4" fill="#C2C8CE"/>
+              <path d="M10 8v5m0 0-3 4m3-4 3 4M6 10h8" fill="none" stroke="#C2C8CE"
                     stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </div>
@@ -777,7 +780,7 @@
         <div class="gate-row">
           <div class="gate-ico">
             <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M3 10h2.5l2-4 2.5 9 2.5-7 1.5 4H17" fill="none" stroke="#9CB4A4"
+              <path d="M3 10h2.5l2-4 2.5 9 2.5-7 1.5 4H17" fill="none" stroke="#C2C8CE"
                     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
@@ -789,7 +792,7 @@
         <div class="gate-row result">
           <div class="gate-ico">
             <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M4 10.5l4 4 8-9" fill="none" stroke="#C7E84A" stroke-width="2.1"
+              <path d="M4 10.5l4 4 8-9" fill="none" stroke="#A3E635" stroke-width="2.1"
                     stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
@@ -1067,7 +1070,10 @@
 (function () {
   "use strict";
 
-  var LIME = "#C7E84A", CHALK = "#EFF4E9", MUTED = "#7E9788", LINE = "#1A4A34";
+  // The app's diagram colours: neon for cameras and their view, cyan for a
+  // screen that shows the replay.
+  var NEON = "#A3E635", CYAN = "#38BDF8", CHALK = "#EFF4E9", MUTED = "#C2C8CE", LINE = "#2A4835",
+      GROUND = "#0A140E";
 
   /* A phone drawn pointing "up" in its own frame, then rotated into place.
      The cone is the field of view, which is what makes a plan view read as
@@ -1076,30 +1082,31 @@
     var dim = opts.ghost ? ' opacity="0.45"' : "";
     var dash = opts.ghost ? ' stroke-dasharray="3 2.6"' : "";
     var lens = opts.replay ? "" :
-      '<circle cx="0" cy="-7.5" r="1.9" fill="' + (opts.accent || LIME) + '"/>';
+      '<circle cx="0" cy="-7.5" r="1.9" fill="' + NEON + '"/>';
     var cone = opts.replay ? "" :
-      '<path d="M0 -11 L-30 -46 L30 -46 Z" fill="' + (opts.accent || LIME) + '" opacity="0.13"/>';
-    // The same counterclockwise loop the app icon uses, counter-rotated so it
-    // stays upright however the device is angled in the plan view.
+      '<path d="M0 -11 L-30 -46 L30 -46 Z" fill="' + NEON + '" opacity="0.16"/>';
+    // The app icon's clockwise loop — tail at 3 o'clock, round to a solid
+    // head near 1 o'clock — counter-rotated so it stays upright however the
+    // device is angled in the plan view.
     var play = opts.replay
-      ? '<g transform="rotate(' + (-rot) + ') translate(0,0.6)">' +
-          '<path d="M-1.64 -4.51 A 4.8 4.8 0 1 0 1.64 -4.51" fill="none" stroke="' + LIME +
+      ? '<g transform="rotate(' + (-rot) + ')">' +
+          '<path d="M4.8 0 A 4.8 4.8 0 1 1 2.4 -4.16" fill="none" stroke="' + CYAN +
             '" stroke-width="1.6" stroke-linecap="round"/>' +
-          '<path d="M-0.80 -5.40 L2.78 -5.90 L1.62 -2.70 Z" fill="' + LIME + '"/>' +
+          '<path d="M4.42 -2.99 L0.74 -3.13 L2.45 -6.10 Z" fill="' + CYAN + '"/>' +
         '</g>'
       : "";
     var w = opts.replay ? 26 : 15, h = opts.replay ? 19 : 25;
     return '<g transform="translate(' + x + ',' + y + ') rotate(' + rot + ')"' + dim + '>' +
       cone +
       '<rect x="' + (-w / 2) + '" y="' + (-h / 2) + '" width="' + w + '" height="' + h +
-        '" rx="3.4" fill="#0A2C1E" stroke="' + (opts.accent || CHALK) +
+        '" rx="3.4" fill="' + GROUND + '" stroke="' + (opts.replay ? CYAN : NEON) +
         '" stroke-width="1.5"' + dash + '/>' +
       lens + play +
       '</g>';
   }
 
-  function label(x, y, text, anchor) {
-    return '<text x="' + x + '" y="' + y + '" fill="' + MUTED +
+  function label(x, y, text, anchor, color) {
+    return '<text x="' + x + '" y="' + y + '" fill="' + (color || MUTED) +
       '" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="0.06em" ' +
       'text-anchor="' + (anchor || "middle") + '">' + text + "</text>";
   }
@@ -1115,7 +1122,8 @@
          label(120, 13, "TARGET");
 
     // Golfer and ball.
-    s += '<circle cx="96" cy="80" r="9" fill="' + LIME + '" opacity="0.9"/>' +
+    // Off-white like the app's foot markers: neon is kept for the cameras.
+    s += '<circle cx="96" cy="80" r="9" fill="' + CHALK + '" opacity="0.9"/>' +
          '<circle cx="120" cy="80" r="3.4" fill="' + CHALK + '"/>' +
          label(96, 104, "YOU");
 
@@ -1135,19 +1143,19 @@
     {
       alt: "Plan view: a phone filming down the line, and a replay screen in front of the golfer.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
-            device(198, 92, -78, { replay: true }) + label(198, 122, "REPLAY")
+            device(198, 92, -78, { replay: true }) + label(198, 122, "REPLAY", null, CYAN)
     },
     {
       alt: "Plan view: a phone down the line, and a face-on phone that also shows the replay.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
             device(208, 80, -90, {}) + label(208, 110, "FACE ON") +
-            label(208, 52, "+ REPLAY")
+            label(208, 52, "+ REPLAY", null, CYAN)
     },
     {
       alt: "Plan view: phones down the line and face on, plus a replay screen in front of the golfer.",
       body: device(120, 142, 0, {}) + label(120, 166, "DOWN THE LINE") +
             device(210, 66, -90, {}) + label(210, 96, "FACE ON") +
-            device(186, 140, -62, { replay: true }) + label(190, 166, "REPLAY")
+            device(186, 140, -62, { replay: true }) + label(190, 166, "REPLAY", null, CYAN)
     }
   ];
 
@@ -1181,21 +1189,21 @@
     if (view === "fo") {
       // Square to the camera: symmetric, stance spread, both arms in a V down
       // to the grip, club addressed at a ball on the ground.
-      s += dot(100, 58, 15, LIME);
-      s += bone([[100, 72], [100, 86]], 6, LIME);      // neck
-      s += bone([[82, 88], [118, 88]], 7.5, LIME);     // shoulders
-      s += bone([[100, 88], [100, 136]], 8, LIME);     // spine
-      s += bone([[86, 136], [114, 136]], 7, LIME);     // hips
-      s += bone([[86, 136], [74, 194]], 7, LIME);      // legs, spread
-      s += bone([[114, 136], [126, 194]], 7, LIME);
-      s += bone([[68, 196], [80, 196]], 6, LIME);      // feet
-      s += bone([[120, 196], [132, 196]], 6, LIME);
+      s += dot(100, 58, 15, NEON);
+      s += bone([[100, 72], [100, 86]], 6, NEON);      // neck
+      s += bone([[82, 88], [118, 88]], 7.5, NEON);     // shoulders
+      s += bone([[100, 88], [100, 136]], 8, NEON);     // spine
+      s += bone([[86, 136], [114, 136]], 7, NEON);     // hips
+      s += bone([[86, 136], [74, 194]], 7, NEON);      // legs, spread
+      s += bone([[114, 136], [126, 194]], 7, NEON);
+      s += bone([[68, 196], [80, 196]], 6, NEON);      // feet
+      s += bone([[120, 196], [132, 196]], 6, NEON);
       // Hands sit just trail-side of centre so the shaft has a natural lean; the
       // ball is on the midpoint of the stance, and the shaft runs down the gap
       // between the legs rather than across one.
-      s += bone([[84, 90], [110, 150]], 6, LIME);      // both arms down to the grip
-      s += bone([[116, 90], [110, 150]], 6, LIME);
-      s += dot(110, 152, 6, LIME);                     // hands
+      s += bone([[84, 90], [110, 150]], 6, NEON);      // both arms down to the grip
+      s += bone([[116, 90], [110, 150]], 6, NEON);
+      s += dot(110, 152, 6, NEON);                     // hands
       s += bone([[110, 154], [102, 192]], 3.2, CHALK); // club, addressed down
       s += dot(100, 196, 4.5, CHALK);                  // ball, mid-stance
 
@@ -1204,21 +1212,21 @@
       // reads as distance rather than as something beside the golfer.
       s += '<ellipse cx="162" cy="138" rx="27" ry="7" fill="' + LINE + '"/>';
       s += bone([[162, 138], [162, 108]], 1.8, MUTED);
-      s += '<path d="M163 108 L177 112.5 L163 117 Z" fill="' + LIME + '"/>';
+      s += '<path d="M163 108 L177 112.5 L163 117 Z" fill="' + NEON + '"/>';
 
       // The same address position from the side. The forward bend at the hips
       // is the whole tell: head and shoulders sit well ahead of the hips.
-      s += dot(110, 62, 15, LIME);
-      s += bone([[102, 80], [98, 90]], 6, LIME);       // neck
-      s += dot(98, 90, 8, LIME);                       // shoulder
-      s += bone([[98, 92], [78, 136]], 8, LIME);       // spine, tilted forward
-      s += bone([[82, 136], [74, 136]], 7, LIME);      // hips
-      s += bone([[81, 136], [90, 166], [92, 194]], 7, LIME);   // near leg
-      s += bone([[75, 136], [69, 166], [66, 194]], 7, LIME);   // far leg
-      s += bone([[92, 196], [105, 196]], 6, LIME);     // feet, in profile
-      s += bone([[66, 196], [78, 196]], 6, LIME);
-      s += bone([[98, 92], [104, 146]], 7, LIME);      // arms, hanging together
-      s += dot(105, 148, 6, LIME);                     // hands
+      s += dot(110, 62, 15, NEON);
+      s += bone([[102, 80], [98, 90]], 6, NEON);       // neck
+      s += dot(98, 90, 8, NEON);                       // shoulder
+      s += bone([[98, 92], [78, 136]], 8, NEON);       // spine, tilted forward
+      s += bone([[82, 136], [74, 136]], 7, NEON);      // hips
+      s += bone([[81, 136], [90, 166], [92, 194]], 7, NEON);   // near leg
+      s += bone([[75, 136], [69, 166], [66, 194]], 7, NEON);   // far leg
+      s += bone([[92, 196], [105, 196]], 6, NEON);     // feet, in profile
+      s += bone([[66, 196], [78, 196]], 6, NEON);
+      s += bone([[98, 92], [104, 146]], 7, NEON);      // arms, hanging together
+      s += dot(105, 148, 6, NEON);                     // hands
       s += bone([[105, 150], [122, 192]], 3.2, CHALK); // club, addressed down
       s += dot(126, 196, 4.5, CHALK);                  // ball
     }

@@ -28,12 +28,12 @@
   /* The same golf-course palette as index.html, painted explicitly so this
      page holds on any host and needs no shared stylesheet. */
   :root {
-    --ground:      #04190F;
-    --panel:       #0A2C1E;
-    --line:        #1A4A34;
-    --lime:        #C7E84A;
+    --ground:      #0A140E;
+    --panel:       #122419;
+    --line:        #2A4835;
+    --neon:        #A3E635;
     --chalk:       #EFF4E9;
-    --muted:       #9CB4A4;
+    --muted:       rgba(226, 232, 240, 0.85);
 
     --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
     --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -74,7 +74,7 @@
   }
   .topbar img { border-radius: 6px; display: block; }
   .topbar a { color: inherit; text-decoration: none; }
-  .topbar a:hover { color: var(--lime); }
+  .topbar a:hover { color: var(--neon); }
 
   main { padding: 40px 0 64px; }
 
@@ -89,7 +89,7 @@
     font-family: var(--display);
     font-size: 20px;
     margin: 36px 0 10px;
-    color: var(--lime);
+    color: var(--neon);
   }
 
   .updated {
@@ -101,7 +101,7 @@
 
   .lead {
     font-size: 18px;
-    border-left: 3px solid var(--lime);
+    border-left: 3px solid var(--neon);
     padding-left: 16px;
     margin: 0 0 8px;
   }
@@ -110,7 +110,7 @@
   ul { margin: 0 0 14px; padding-left: 22px; }
   li { margin-bottom: 8px; }
 
-  a { color: var(--lime); }
+  a { color: var(--neon); }
 
   .panel {
     background: var(--panel);
